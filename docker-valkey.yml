@@ -1,0 +1,132 @@
+services:
+  valkey-1:
+    image: valkey/valkey:latest
+    ports:
+      - "6379:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  valkey-2:
+    image: valkey/valkey:latest
+    ports:
+      - "6380:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  valkey-3:
+    image: valkey/valkey:latest
+    ports:
+      - "6381:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  valkey-4:
+    image: valkey/valkey:latest
+    ports:
+      - "6382:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  valkey-5:
+    image: valkey/valkey:latest
+    ports:
+      - "6383:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  valkey-6:
+    image: valkey/valkey:latest
+    ports:
+      - "6384:6379"
+    command:
+      - valkey-server
+      - --cluster-enabled yes
+      - --cluster-node-timeout 5000
+      - --appendonly yes
+      - --requirepass test_pw
+    networks:
+      - valkey-net
+    healthcheck:
+      test: [ "CMD", "valkey-cli", "-a", "test_pw", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  cluster-init:
+    image: valkey/valkey:latest
+    depends_on:
+      valkey-1:
+        condition: service_healthy
+      valkey-2:
+        condition: service_healthy
+      valkey-3:
+        condition: service_healthy
+      valkey-4:
+        condition: service_healthy
+      valkey-5:
+        condition: service_healthy
+      valkey-6:
+        condition: service_healthy
+    command: >
+      sh -c "sleep 5 && valkey-cli --cluster create valkey-1:6379 valkey-2:6379 valkey-3:6379 valkey-4:6379 valkey-5:6379 valkey-6:6379 --cluster-replicas 1 --cluster-yes"
+    networks:
+      - valkey-net
+
+networks:
+  valkey-net:
+    driver: bridge

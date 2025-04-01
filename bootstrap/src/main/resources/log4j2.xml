@@ -1,0 +1,28 @@
+<Configuration>
+    <Properties>
+        <Property name="LOG_LEVEL_PATTERN">{%5p}{FATAL=red blink, ERROR=red bold, WARN=yellow bold, INFO=green bold,
+            DEBUG=blue bold, TRACE=blue}
+        </Property>
+    </Properties>
+    <Appenders>
+        <!-- 콘솔에 로그를 출력하는 Appender 설정 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8"
+                           disableAnsi="false"
+                           pattern="%style{%d{MM-dd HH:mm:ss}}{magenta} %highlight${LOG_LEVEL_PATTERN} %tid - %style{[%t]}{blue} %style{[%c{1.1.1.*}]}{cyan} %m%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- 루트 로거 설정 -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+        <!-- 특정 로거의 로그 레벨 조정 -->
+        <Logger name="org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer"
+                level="ERROR" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>

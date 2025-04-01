@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: side
+
+  config:
+    import: classpath:jwt.yml, classpath:valkey.yml
+
+  jpa:
+    open-in-view: false
+
+logging:
+  config: classpath:log4j2.xml
